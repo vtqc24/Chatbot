@@ -1,0 +1,32 @@
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
+# Tạo chatbot
+chatbot = ChatBot(
+    'SimpleBot',
+    storage_adapter='chatterbot.storage.SQLStorageAdapter',
+    database_uri='sqlite:///database.sqlite3'
+)
+
+# Tạo trainer và huấn luyện chatbot với dữ liệu có sẵn
+trainer = ChatterBotCorpusTrainer(chatbot)
+trainer.train("chatterbot.corpus.english.greetings", 
+              "chatterbot.corpus.english.conversations")
+
+# Hàm chính để chat với bot
+def chat_with_bot():
+    print("Hello, I am your friendly chatbot. Type 'exit' to end the conversation.")
+    while True:
+        user_input = input("You: ")
+        
+        if user_input.lower() == 'exit':
+            print("Goodbye!")
+            break
+        
+        # Đưa ra câu trả lời từ bot
+        response = chatbot.get_response(user_input)
+        print("Bot:", response)
+
+# Chạy chatbot
+if __name__ == "__main__":
+    chat_with_bot()
